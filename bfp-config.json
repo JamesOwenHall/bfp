@@ -1,0 +1,11 @@
+{
+  "listen address": "/tmp/bfp.sock",
+  "directions": [
+    {
+      "name": "password",
+      "type": "string",
+      "window size": 10,
+      "max hits": 3
+    }
+  ]
+}
