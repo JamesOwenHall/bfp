@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/JamesOwenHall/BruteForceProtection/config"
-	"github.com/JamesOwenHall/BruteForceProtection/hitcounter"
+	"github.com/JamesOwenHall/BruteForceProtection/core/config"
+	"github.com/JamesOwenHall/BruteForceProtection/core/hitcounter"
 	"os"
 	"os/signal"
 	"runtime"

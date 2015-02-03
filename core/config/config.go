@@ -2,7 +2,7 @@ package config
 
 import (
 	"fmt"
-	"github.com/JamesOwenHall/BruteForceProtection/hitcounter"
+	"github.com/JamesOwenHall/BruteForceProtection/core/hitcounter"
 )
 
 // Configuration is a struct that represents the contents of a configuration

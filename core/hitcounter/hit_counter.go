@@ -1,7 +1,7 @@
 package hitcounter
 
 import (
-	"github.com/JamesOwenHall/BruteForceProtection/server"
+	"github.com/JamesOwenHall/BruteForceProtection/core/server"
 )
 
 type HitCounter struct {
