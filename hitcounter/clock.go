@@ -6,7 +6,7 @@ import (
 )
 
 type Clock struct {
-	lock   sync.Mutex
+	lock   sync.RWMutex
 	ticks  int32
 	ticker <-chan time.Time
 }
@@ -31,8 +31,8 @@ func NewClock() *Clock {
 
 func (c *Clock) GetTime() int32 {
 	var result int32
-	c.lock.Lock()
+	c.lock.RLock()
 	result = c.ticks
-	c.lock.Unlock()
+	c.lock.RUnlock()
 	return result
 }
