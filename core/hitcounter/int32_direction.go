@@ -1,7 +1,6 @@
 package hitcounter
 
 import (
-	"log"
 	"sync"
 )
 
@@ -39,8 +38,6 @@ func (i *Int32Direction) Hit(clock int32, val interface{}) bool {
 	defer i.lock.Unlock()
 
 	num, ok := i.hits[value]
-	log.Println("num =", num, "clock =", clock)
-
 	if !ok || num < clock {
 		// No recent hits
 		i.hits[value] = clock + i.incAmount
