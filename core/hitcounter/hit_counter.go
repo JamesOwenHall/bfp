@@ -2,7 +2,6 @@ package hitcounter
 
 import (
 	"github.com/JamesOwenHall/BruteForceProtection/core/server"
-	"log"
 )
 
 type HitCounter struct {
@@ -19,10 +18,6 @@ func NewHitCounter(directions []Direction) *HitCounter {
 		result.Routes[dir.Name()] = func(val interface{}) server.Response {
 			resp := server.Response{
 				Valid: dir.Hit(result.clock.GetTime(), val),
-			}
-
-			if !resp.Valid {
-				log.Println("Rejected", dir.Name(), "=", val)
 			}
 
 			return resp
