@@ -11,6 +11,7 @@ import (
 type jsonConfiguration struct {
 	Directions    []jsonDirection `json:"directions"`
 	ListenAddress string          `json:"listen address"`
+	ListenType    string          `json:"listen type"`
 }
 
 // jsonDirection is a struct that mirrors the direction objects as they should

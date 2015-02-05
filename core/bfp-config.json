@@ -1,4 +1,5 @@
 {
+  "listen type": "unix",
   "listen address": "/tmp/bfp.sock",
   "directions": [
     {

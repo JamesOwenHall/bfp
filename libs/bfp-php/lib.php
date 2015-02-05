@@ -1,10 +1,16 @@
 <?php
 
 class BFP {
+  private $type;
   private $addr;
 
-  public function __construct($addr) {
+  public function __construct($type, $addr) {
+    $this->type = $type;
     $this->addr = $addr;
+  }
+
+  public function getType() {
+    return $this->type;
   }
 
   public function getAddr() {
@@ -12,7 +18,7 @@ class BFP {
   }
 
   public function hit($direction, $value) {
-    $file = stream_socket_client('unix://' . $this->addr);
+    $file = stream_socket_client($this->type . '://' . $this->addr);
     if ($file === FALSE) {
       return TRUE;
     }

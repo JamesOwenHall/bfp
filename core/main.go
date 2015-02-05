@@ -28,7 +28,7 @@ func main() {
 	// Start server
 	counter := hitcounter.NewHitCounter(configuration.Directions)
 	defer counter.Close()
-	go counter.ListenAndServe(configuration.ListenAddress)
+	go counter.ListenAndServe(configuration.ListenType, configuration.ListenAddress)
 	fmt.Println("Now listening at", configuration.ListenAddress)
 
 	// Capture interrupt signal so that the server closes properly

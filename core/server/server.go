@@ -16,10 +16,10 @@ func New() *Server {
 	}
 }
 
-func (s *Server) ListenAndServe(addr string) {
+func (s *Server) ListenAndServe(typ, addr string) {
 	// Start listening.
 	var err error
-	s.listener, err = net.Listen("unix", addr)
+	s.listener, err = net.Listen(typ, addr)
 	if err != nil {
 		panic(err)
 	}

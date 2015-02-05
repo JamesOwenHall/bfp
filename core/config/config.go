@@ -10,6 +10,7 @@ import (
 type Configuration struct {
 	Directions    []hitcounter.Direction
 	ListenAddress string
+	ListenType    string
 }
 
 // ReadConfig parses a configuration file and returns an instance of
@@ -22,9 +23,13 @@ func ReadConfig(filename string) (*Configuration, error) {
 	if len(parsed.Directions) == 0 {
 		return nil, fmt.Errorf("no directions defined.")
 	}
+	if parsed.ListenType != "unix" && parsed.ListenType != "tcp" {
+		return nil, fmt.Errorf(`unknown listen type "%s"`, parsed.ListenType)
+	}
 
 	result := new(Configuration)
 	result.ListenAddress = parsed.ListenAddress
+	result.ListenType = parsed.ListenType
 	result.Directions = make([]hitcounter.Direction, 0, len(parsed.Directions))
 
 	for _, jsonDir := range parsed.Directions {
