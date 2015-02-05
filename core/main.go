@@ -12,7 +12,7 @@ import (
 
 func main() {
 	// Parse flags
-	configFilename := flag.String("c", "bfp-config.json", "the name of the configuration file")
+	configFilename := flag.String("c", "config.json", "the name of the configuration file")
 	flag.Parse()
 
 	// Setup multithreading
