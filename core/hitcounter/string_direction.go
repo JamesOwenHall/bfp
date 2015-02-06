@@ -1,20 +1,15 @@
 package hitcounter
 
-import (
-	"sync"
-)
-
 type StringDirection struct {
-	hits       map[string]int32
+	hits       *StringMap
 	name       string
-	lock       sync.Mutex
 	windowSize int32
 	incAmount  int32
 }
 
 func NewStringDirection(name string, windowSize, maxHits int32) *StringDirection {
 	return &StringDirection{
-		hits:       make(map[string]int32),
+		hits:       NewStringMap(),
 		name:       name,
 		windowSize: windowSize,
 		incAmount:  windowSize / maxHits,
@@ -33,17 +28,16 @@ func (s *StringDirection) Hit(clock int32, val interface{}) bool {
 	}
 
 	// We need to use the lock to access the hits map.
-	s.lock.Lock()
-	defer s.lock.Unlock()
+	num := s.hits.Lock(value)
+	defer s.hits.Unlock(value)
 
-	num, ok := s.hits[value]
-	if !ok || num < clock {
+	if *num < clock {
 		// No recent hits
-		s.hits[value] = clock + s.incAmount
+		*num = clock + s.incAmount
 		return true
-	} else if num < clock+s.windowSize {
+	} else if *num < clock+s.windowSize {
 		// Recent hits, but not over the threshold
-		s.hits[value] = num + s.incAmount
+		*num += s.incAmount
 		return true
 	} else {
 		// Over the threshold
