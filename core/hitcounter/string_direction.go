@@ -44,3 +44,17 @@ func (s *StringDirection) Hit(clock int32, val interface{}) bool {
 		return false
 	}
 }
+
+func (s *StringDirection) CleanUp(clock int32) {
+	for i, m := range s.hits.Mutexes {
+		m.Lock()
+
+		for k := range s.hits.Shards[i] {
+			if *s.hits.Shards[i][k] < clock {
+				delete(s.hits.Shards[i], k)
+			}
+		}
+
+		m.Unlock()
+	}
+}

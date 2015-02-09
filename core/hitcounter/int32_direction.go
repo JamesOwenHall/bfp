@@ -45,3 +45,17 @@ func (i *Int32Direction) Hit(clock int32, val interface{}) bool {
 		return false
 	}
 }
+
+func (i *Int32Direction) CleanUp(clock int32) {
+	for j, m := range i.hits.Mutexes {
+		m.Lock()
+
+		for k := range i.hits.Shards[j] {
+			if *i.hits.Shards[j][k] < clock {
+				delete(i.hits.Shards[j], k)
+			}
+		}
+
+		m.Unlock()
+	}
+}
