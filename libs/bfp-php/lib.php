@@ -3,10 +3,12 @@
 class BFP {
   private $type;
   private $addr;
+  private $port;
 
-  public function __construct($type, $addr) {
+  public function __construct($type, $addr, $port = 9999) {
     $this->type = $type;
     $this->addr = $addr;
+    $this->port = $port;
   }
 
   public function getType() {
@@ -18,9 +20,15 @@ class BFP {
   }
 
   public function hit($direction, $value) {
-    $file = stream_socket_client($this->type . '://' . $this->addr);
+    $file = NULL;
+    if ($this->type === "unix") {
+      $file = pfsockopen("unix://" . $this->addr);
+    } else {
+      $file = pfsockopen("tcp://" . $this->addr, $this->port);
+    }
+
     if ($file === FALSE) {
-      return TRUE;
+      return FALSE;
     }
 
     $request = json_encode(array(
@@ -29,13 +37,16 @@ class BFP {
     ));
     fwrite($file, $request);
 
-    $responseJson = fgets($file);
-    $response = json_decode($responseJson, TRUE);
+    $valid = $this->readResponse($file);
+    return $valid;
+  }
 
-    if ($response['Valid'] === FALSE) {
-      return FALSE;
-    } else {
+  private function readResponse($file) {
+    $data = fread($file, 1);
+    if ($data === "t") {
       return TRUE;
+    } else {
+      return FALSE;
     }
   }
 }

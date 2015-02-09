@@ -6,13 +6,13 @@ import (
 )
 
 type Server struct {
-	Routes   map[string]func(interface{}) Response
+	Routes   map[string]func(interface{}) bool
 	listener net.Listener
 }
 
 func New() *Server {
 	return &Server{
-		Routes: make(map[string]func(interface{}) Response),
+		Routes: make(map[string]func(interface{}) bool),
 	}
 }
 
@@ -34,20 +34,23 @@ func (s *Server) ListenAndServe(typ, addr string) {
 
 		// For performance, we launch every handler in its own goroutine.
 		go func(conn net.Conn) {
-			request, err := ReadRequest(conn)
-			if err != nil {
-				log.Println("Failed to read request:", err)
-				return
-			}
+			for {
+				request, err := ReadRequest(conn)
+				if err != nil {
+					conn.Close()
+					return
+				}
 
-			// Check if the route exists.
-			if handler, ok := s.Routes[request.Direction]; ok {
-				response := handler(request.Value)
-				response.Write(conn)
+				// Check if the route exists.
+				if handler, ok := s.Routes[request.Direction]; ok {
+					response := handler(request.Value)
+					if response {
+						conn.Write([]byte("t"))
+					} else {
+						conn.Write([]byte("f"))
+					}
+				}
 			}
-
-			// Remember to close the connection
-			conn.Close()
 		}(conn)
 	}
 }

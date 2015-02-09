@@ -10,14 +10,14 @@ const NumShards = 256
 // StringMap
 
 type StringMap struct {
-	Mutexes []sync.RWMutex
+	Mutexes []sync.Mutex
 	Shards  []map[string]*int32
 }
 
 func NewStringMap() *StringMap {
 	result := new(StringMap)
 
-	result.Mutexes = make([]sync.RWMutex, NumShards)
+	result.Mutexes = make([]sync.Mutex, NumShards)
 	result.Shards = make([]map[string]*int32, NumShards)
 	for i := 0; i < NumShards; i++ {
 		result.Shards[i] = make(map[string]*int32)

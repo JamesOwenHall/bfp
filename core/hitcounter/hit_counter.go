@@ -15,12 +15,8 @@ func NewHitCounter(directions []Direction) *HitCounter {
 	result.Server = server.New()
 
 	for _, dir := range directions {
-		result.Routes[dir.Name()] = func(val interface{}) server.Response {
-			resp := server.Response{
-				Valid: dir.Hit(result.clock.GetTime(), val),
-			}
-
-			return resp
+		result.Routes[dir.Name()] = func(val interface{}) bool {
+			return dir.Hit(result.clock.GetTime(), val)
 		}
 	}
 
