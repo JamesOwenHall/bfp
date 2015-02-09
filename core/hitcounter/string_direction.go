@@ -28,19 +28,21 @@ func (s *StringDirection) Hit(clock int32, val interface{}) bool {
 	}
 
 	// We need to use the lock to access the hits map.
-	num := s.hits.Lock(value)
+	status := s.hits.Lock(value)
 	defer s.hits.Unlock(value)
 
-	if *num < clock {
+	if status.FrontTile < clock {
 		// No recent hits
-		*num = clock + s.incAmount
+		status.FrontTile = clock + s.incAmount
+		status.IsBlocked = false
 		return true
-	} else if *num < clock+s.windowSize {
+	} else if status.FrontTile < clock+s.windowSize {
 		// Recent hits, but not over the threshold
-		*num += s.incAmount
-		return true
+		status.FrontTile += s.incAmount
+		return !status.IsBlocked
 	} else {
 		// Over the threshold
+		status.IsBlocked = true
 		return false
 	}
 }
@@ -50,7 +52,7 @@ func (s *StringDirection) CleanUp(clock int32) {
 		m.Lock()
 
 		for k := range s.hits.Shards[i] {
-			if *s.hits.Shards[i][k] < clock {
+			if s.hits.Shards[i][k].FrontTile < clock {
 				delete(s.hits.Shards[i], k)
 			}
 		}
