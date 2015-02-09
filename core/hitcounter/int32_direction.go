@@ -24,7 +24,7 @@ func (i *Int32Direction) Hit(clock int32, val interface{}) bool {
 	// JSON encodes numbers as float64, so we need to type assert, then cast.
 	valueFloat, ok := val.(float64)
 	if !ok {
-		return true
+		return false
 	}
 	value := int32(valueFloat)
 

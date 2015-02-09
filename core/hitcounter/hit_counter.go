@@ -17,9 +17,7 @@ func NewHitCounter(directions []Direction) *HitCounter {
 
 	for _, dir := range directions {
 		// Add the route
-		result.Routes[dir.Name()] = func(val interface{}) bool {
-			return dir.Hit(result.clock.GetTime(), val)
-		}
+		result.Routes[dir.Name()] = makeRoute(result, dir)
 
 		// Schedule the cleanup
 		go func(dir Direction) {
@@ -31,4 +29,10 @@ func NewHitCounter(directions []Direction) *HitCounter {
 	}
 
 	return result
+}
+
+func makeRoute(hitCounter *HitCounter, dir Direction) func(interface{}) bool {
+	return func(val interface{}) bool {
+		return dir.Hit(hitCounter.clock.GetTime(), val)
+	}
 }

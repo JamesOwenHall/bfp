@@ -24,7 +24,7 @@ func (s *StringDirection) Hit(clock int32, val interface{}) bool {
 	// Make sure we have a string
 	value, ok := val.(string)
 	if !ok {
-		return true
+		return false
 	}
 
 	// We need to use the lock to access the hits map.
