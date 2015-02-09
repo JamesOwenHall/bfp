@@ -11,5 +11,5 @@ You configure the core using a JSON configuration file.  By default, core looks 
 - `"directions"` expects an array of objects that represent the different directions to track.  Each direction should have all of the following fields
 	- `"name"` is the string of the name of the direction (e.g. `"password"`).
 	- `"type"` is the string that describes the type of data.  The available options for type are `"string"` and `"int32"`.
-	- `"window size"` is the positive integer of the time (in seconds) that we're tracking values.
-	- `"max hits"` is the positive integer that limits how many hits we allow within the observation window.
+	- `"window size"` is the positive number of the time (in seconds) that we're tracking values.
+	- `"max hits"` is the positive number that limits how many hits we allow within the observation window.
