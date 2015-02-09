@@ -9,7 +9,7 @@ const NumShards = 256
 
 type BlockStatus struct {
 	IsBlocked bool
-	FrontTile int32
+	FrontTile float64
 }
 
 // StringMap

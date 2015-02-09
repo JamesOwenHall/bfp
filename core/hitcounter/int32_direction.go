@@ -3,16 +3,16 @@ package hitcounter
 type Int32Direction struct {
 	hits       *Int32Map
 	name       string
-	windowSize int32
-	incAmount  int32
+	windowSize float64
+	incAmount  float64
 }
 
 func NewInt32Direction(name string, windowSize, maxHits int32) *Int32Direction {
 	return &Int32Direction{
 		hits:       NewInt32Map(),
 		name:       name,
-		windowSize: windowSize,
-		incAmount:  windowSize / maxHits,
+		windowSize: float64(windowSize),
+		incAmount:  float64(windowSize) / float64(maxHits),
 	}
 }
 
@@ -32,19 +32,33 @@ func (i *Int32Direction) Hit(clock int32, val interface{}) bool {
 	status := i.hits.Lock(value)
 	defer i.hits.Unlock(value)
 
-	if status.FrontTile < clock {
+	// We're only dealing with floats from here on.
+	fClock := float64(clock)
+
+	if status.FrontTile < fClock {
 		// No recent hits
-		status.FrontTile = clock + i.incAmount
+		status.FrontTile = fClock + i.incAmount
 		status.IsBlocked = false
 		return true
-	} else if status.FrontTile < clock+i.windowSize {
-		// Recent hits, but not over the threshold
-		status.FrontTile += i.incAmount
-		return !status.IsBlocked
-	} else {
-		// Over the threshold
+	} else if status.FrontTile > fClock+i.windowSize {
+		// We've crossed the threshold, start blocking
 		status.IsBlocked = true
 		return false
+	} else {
+		// We haven't crossed the threshold yet, let's increment
+		status.FrontTile += i.incAmount
+
+		// Now that we've incremented, we may have crossed the threshold
+		if status.FrontTile > fClock+i.windowSize {
+			// We crossed the threshold, start blocking
+			status.IsBlocked = true
+			return false
+		} else {
+			// We're not over the threshold even after incrementing.  But it's
+			// possible that we crossed it earlier, so let's make sure we're
+			// not already blocking.
+			return !status.IsBlocked
+		}
 	}
 }
 
@@ -53,7 +67,7 @@ func (i *Int32Direction) CleanUp(clock int32) {
 		m.Lock()
 
 		for k := range i.hits.Shards[j] {
-			if i.hits.Shards[j][k].FrontTile < clock {
+			if i.hits.Shards[j][k].FrontTile < float64(clock) {
 				delete(i.hits.Shards[j], k)
 			}
 		}
