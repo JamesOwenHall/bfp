@@ -6,13 +6,15 @@
       "name": "password",
       "type": "string",
       "window size": 10,
-      "max hits": 3
+      "max hits": 3,
+      "clean up time": 5
     },
     {
       "name": "id",
       "type": "int32",
       "window size": 3,
-      "max hits": 3
+      "max hits": 3,
+      "clean up time": 7
     }
   ]
 }

@@ -38,6 +38,11 @@ func ReadConfig(filename string) (*Configuration, error) {
 			return nil, fmt.Errorf(`direction named "%s" contains non-positive parameters.`, jsonDir.Name)
 		}
 
+		// Set defaults
+		if int32(jsonDir.CleanUpTime) == 0 {
+			jsonDir.CleanUpTime = 5
+		}
+
 		// Create the direction according to its type
 		var dir hitcounter.Direction
 		switch jsonDir.Typ {
@@ -46,12 +51,14 @@ func ReadConfig(filename string) (*Configuration, error) {
 				jsonDir.Name,
 				int32(jsonDir.WindowSize),
 				int32(jsonDir.MaxHits),
+				int32(jsonDir.CleanUpTime),
 			)
 		case "int32":
 			dir = hitcounter.NewInt32Direction(
 				jsonDir.Name,
 				int32(jsonDir.WindowSize),
 				int32(jsonDir.MaxHits),
+				int32(jsonDir.CleanUpTime),
 			)
 		default:
 			return nil, fmt.Errorf("invalid direction type %s.", jsonDir.Typ)

@@ -17,10 +17,11 @@ type jsonConfiguration struct {
 // jsonDirection is a struct that mirrors the direction objects as they should
 // be found in the configuration file.
 type jsonDirection struct {
-	Name       string  `json:"name"`
-	Typ        string  `json:"type"`
-	WindowSize float64 `json:"window size"`
-	MaxHits    float64 `json:"max hits"`
+	Name        string  `json:"name"`
+	Typ         string  `json:"type"`
+	WindowSize  float64 `json:"window size"`
+	MaxHits     float64 `json:"max hits"`
+	CleanUpTime float64 `json:"clean up time"`
 }
 
 // parseJsonFile will read the contents of a file and return its structure as a

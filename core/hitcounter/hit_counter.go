@@ -23,7 +23,7 @@ func NewHitCounter(directions []Direction) *HitCounter {
 		go func(dir Direction) {
 			for {
 				dir.CleanUp(result.clock.GetTime())
-				time.Sleep(5 * time.Second)
+				time.Sleep(time.Duration(dir.CleanUpTime()) * time.Second)
 			}
 		}(dir)
 	}
