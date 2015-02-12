@@ -11,12 +11,12 @@ import (
 )
 
 func main() {
+	// Setup multithreading
+	runtime.GOMAXPROCS(runtime.NumCPU())
+
 	// Parse flags
 	configFilename := flag.String("c", "config.json", "the name of the configuration file")
 	flag.Parse()
-
-	// Setup multithreading
-	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	// Read the configuration
 	configuration, errs := config.ReadConfig(*configFilename)
@@ -28,11 +28,18 @@ func main() {
 		return
 	}
 
-	// Start server
+	// Create server
 	counter := hitcounter.NewHitCounter(configuration.Directions)
 	defer counter.Close()
-	go counter.ListenAndServe(configuration.ListenType, configuration.ListenAddress)
-	fmt.Println("Now listening at", configuration.ListenAddress)
+
+	// Start server
+	err := counter.ListenAndServe(configuration.ListenType, configuration.ListenAddress)
+	if err == nil {
+		fmt.Println("Now listening at", configuration.ListenAddress)
+	} else {
+		fmt.Println("Server error: can't listen at", configuration.ListenAddress)
+		return
+	}
 
 	// Capture interrupt signal so that the server closes properly
 	interrupts := make(chan os.Signal)

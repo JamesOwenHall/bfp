@@ -16,15 +16,20 @@ func New() *Server {
 	}
 }
 
-func (s *Server) ListenAndServe(typ, addr string) {
+func (s *Server) ListenAndServe(typ, addr string) error {
 	// Start listening.
 	var err error
 	s.listener, err = net.Listen(typ, addr)
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	// Accept requests.
+	go s.acceptRequests()
+	return nil
+}
+
+func (s *Server) acceptRequests() {
 	for {
 		conn, err := s.listener.Accept()
 		if err != nil {
@@ -56,5 +61,10 @@ func (s *Server) ListenAndServe(typ, addr string) {
 }
 
 func (s *Server) Close() {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Println(err)
+		}
+	}()
 	s.listener.Close()
 }
