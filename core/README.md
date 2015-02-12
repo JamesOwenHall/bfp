@@ -13,6 +13,8 @@ You configure the core using a JSON configuration file.  By default, core looks 
 	- `"type"` is the string that describes the type of data.  The available options for type are `"string"` and `"int32"`.
 	- `"window size"` is the positive number of the time (in seconds) that we're tracking values.
 	- `"max hits"` is the positive number that limits how many hits we allow within the observation window.
+
 Additionally, the following are optional fields for directions
+
 	- `"clean up time"` is the positive number that sets how many seconds should pass between clean up runs.  Default is 5 seconds.
 	- `"max tracked"` is the positive number that sets the threshold for the maximum number of values that should be tracked.  For performance, an approximation is used.  Once the number of tracked values exceeds this value, all subsequent requests will be considered invalid until the the clean up process reduces the number of tracked values below the threshold.  Default is no maximum.
