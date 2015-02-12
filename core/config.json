@@ -5,7 +5,7 @@
     {
       "name": "password",
       "type": "string",
-      "window size": 10,
+      "window size": 10.2,
       "max hits": 3,
       "clean up time": 5
     },

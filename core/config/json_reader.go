@@ -29,14 +29,25 @@ type jsonDirection struct {
 func parseJsonFile(filename string) (*jsonConfiguration, error) {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
-		return nil, fmt.Errorf("can't find configuration file %s.", filename)
+		return nil, fmt.Errorf("can't read configuration file %s.", filename)
 	}
 
 	parsed := new(jsonConfiguration)
 	err = json.Unmarshal(data, parsed)
 	if err != nil {
-		return nil, fmt.Errorf("configuration file is not valid.")
+		return nil, parseError(err)
 	}
 
 	return parsed, nil
+}
+
+// parseError returns a more descriptive error based on the return value of
+// json.Unmarshal
+func parseError(err error) error {
+	typeErr, ok := err.(*json.UnmarshalTypeError)
+	if ok {
+		return fmt.Errorf("configuration file has mismatched type; %s should be %s", typeErr.Value, typeErr.Type)
+	} else {
+		return fmt.Errorf("can't parse configuration file")
+	}
 }

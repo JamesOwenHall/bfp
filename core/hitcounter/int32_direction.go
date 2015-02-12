@@ -2,19 +2,19 @@ package hitcounter
 
 type Int32Direction struct {
 	hits        *Int32Map
-	cleanUpTime int32
+	cleanUpTime float64
 	name        string
 	windowSize  float64
 	incAmount   float64
 }
 
-func NewInt32Direction(name string, windowSize, maxHits, cleanUpTime int32) *Int32Direction {
+func NewInt32Direction(name string, windowSize, maxHits, cleanUpTime float64) *Int32Direction {
 	return &Int32Direction{
 		hits:        NewInt32Map(),
 		cleanUpTime: cleanUpTime,
 		name:        name,
-		windowSize:  float64(windowSize),
-		incAmount:   float64(windowSize) / float64(maxHits),
+		windowSize:  windowSize,
+		incAmount:   windowSize / maxHits,
 	}
 }
 
@@ -78,6 +78,6 @@ func (i *Int32Direction) CleanUp(clock int32) {
 	}
 }
 
-func (i *Int32Direction) CleanUpTime() int32 {
+func (i *Int32Direction) CleanUpTime() float64 {
 	return i.cleanUpTime
 }

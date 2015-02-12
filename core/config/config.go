@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"github.com/JamesOwenHall/BruteForceProtection/core/hitcounter"
 )
 
@@ -15,16 +14,13 @@ type Configuration struct {
 
 // ReadConfig parses a configuration file and returns an instance of
 // Configuration.
-func ReadConfig(filename string) (*Configuration, error) {
+func ReadConfig(filename string) (*Configuration, []error) {
 	parsed, err := parseJsonFile(filename)
 	if err != nil {
-		return nil, err
+		return nil, []error{err}
 	}
-	if len(parsed.Directions) == 0 {
-		return nil, fmt.Errorf("no directions defined.")
-	}
-	if parsed.ListenType != "unix" && parsed.ListenType != "tcp" {
-		return nil, fmt.Errorf(`unknown listen type "%s"`, parsed.ListenType)
+	if errs := parsed.Validate(); len(errs) != 0 {
+		return nil, errs
 	}
 
 	result := new(Configuration)
@@ -33,35 +29,23 @@ func ReadConfig(filename string) (*Configuration, error) {
 	result.Directions = make([]hitcounter.Direction, 0, len(parsed.Directions))
 
 	for _, jsonDir := range parsed.Directions {
-		// Validate the input (only positive numbers allowed)
-		if jsonDir.MaxHits <= 0 || jsonDir.WindowSize <= 0 {
-			return nil, fmt.Errorf(`direction named "%s" contains non-positive parameters.`, jsonDir.Name)
-		}
-
-		// Set defaults
-		if int32(jsonDir.CleanUpTime) == 0 {
-			jsonDir.CleanUpTime = 5
-		}
-
 		// Create the direction according to its type
 		var dir hitcounter.Direction
 		switch jsonDir.Typ {
 		case "string":
 			dir = hitcounter.NewStringDirection(
 				jsonDir.Name,
-				int32(jsonDir.WindowSize),
-				int32(jsonDir.MaxHits),
-				int32(jsonDir.CleanUpTime),
+				jsonDir.WindowSize,
+				jsonDir.MaxHits,
+				jsonDir.CleanUpTime,
 			)
 		case "int32":
 			dir = hitcounter.NewInt32Direction(
 				jsonDir.Name,
-				int32(jsonDir.WindowSize),
-				int32(jsonDir.MaxHits),
-				int32(jsonDir.CleanUpTime),
+				jsonDir.WindowSize,
+				jsonDir.MaxHits,
+				jsonDir.CleanUpTime,
 			)
-		default:
-			return nil, fmt.Errorf("invalid direction type %s.", jsonDir.Typ)
 		}
 
 		// Add it to the list

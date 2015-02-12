@@ -19,9 +19,12 @@ func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	// Read the configuration
-	configuration, err := config.ReadConfig(*configFilename)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "error:", err)
+	configuration, errs := config.ReadConfig(*configFilename)
+	if len(errs) != 0 {
+		for _, err := range errs {
+			fmt.Fprintln(os.Stderr, "configuration error:", err)
+		}
+
 		return
 	}
 
