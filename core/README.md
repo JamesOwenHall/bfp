@@ -13,4 +13,4 @@ You configure the core using a JSON configuration file.  By default, core looks 
 	- `"type"` is the string that describes the type of data.  The available options for type are `"string"` and `"int32"`.
 	- `"window size"` is the positive number of the time (in seconds) that we're tracking values.
 	- `"max hits"` is the positive number that limits how many hits we allow within the observation window.
-	- `"clean up time"` is the positive integer that sets how many seconds should pass between clean up runs.
+	- `"clean up time"` is the positive number that sets how many seconds should pass between clean up runs.
