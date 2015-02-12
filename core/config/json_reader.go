@@ -22,6 +22,7 @@ type jsonDirection struct {
 	WindowSize  float64 `json:"window size"`
 	MaxHits     float64 `json:"max hits"`
 	CleanUpTime float64 `json:"clean up time"`
+	MaxTracked  float64 `json:"max tracked"`
 }
 
 // parseJsonFile will read the contents of a file and return its structure as a

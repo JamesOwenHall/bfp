@@ -57,6 +57,11 @@ func (j *jsonConfiguration) Validate() []error {
 		} else if dir.CleanUpTime < 0 {
 			result = append(result, fmt.Errorf("direction %s has a negative clean up time of %f", dir.Name, dir.CleanUpTime))
 		}
+
+		// Optional field
+		if dir.MaxTracked < 0 {
+			result = append(result, fmt.Errorf("direction %s has a negative max tracked of %f", dir.MaxTracked))
+		}
 	}
 
 	return result

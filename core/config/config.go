@@ -38,6 +38,7 @@ func ReadConfig(filename string) (*Configuration, []error) {
 				jsonDir.WindowSize,
 				jsonDir.MaxHits,
 				jsonDir.CleanUpTime,
+				jsonDir.MaxTracked,
 			)
 		case "int32":
 			dir = hitcounter.NewInt32Direction(
@@ -45,6 +46,7 @@ func ReadConfig(filename string) (*Configuration, []error) {
 				jsonDir.WindowSize,
 				jsonDir.MaxHits,
 				jsonDir.CleanUpTime,
+				jsonDir.MaxTracked,
 			)
 		}
 

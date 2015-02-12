@@ -8,9 +8,9 @@ type StringDirection struct {
 	incAmount   float64
 }
 
-func NewStringDirection(name string, windowSize, maxHits, cleanUpTime float64) *StringDirection {
+func NewStringDirection(name string, windowSize, maxHits, cleanUpTime, maxTracked float64) *StringDirection {
 	return &StringDirection{
-		hits:        NewStringMap(),
+		hits:        NewStringMap(int64(maxTracked)),
 		cleanUpTime: cleanUpTime,
 		name:        name,
 		windowSize:  windowSize,
@@ -32,6 +32,11 @@ func (s *StringDirection) Hit(clock int32, val interface{}) bool {
 	// We need to use the lock to access the hits map.
 	status := s.hits.Lock(value)
 	defer s.hits.Unlock(value)
+
+	// Status is nil when we've exceeded the max number of tracked values.
+	if status == nil {
+		return false
+	}
 
 	// We're only dealing with floats from here on.
 	fClock := float64(clock)

@@ -8,9 +8,9 @@ type Int32Direction struct {
 	incAmount   float64
 }
 
-func NewInt32Direction(name string, windowSize, maxHits, cleanUpTime float64) *Int32Direction {
+func NewInt32Direction(name string, windowSize, maxHits, cleanUpTime, maxTracked float64) *Int32Direction {
 	return &Int32Direction{
-		hits:        NewInt32Map(),
+		hits:        NewInt32Map(int64(maxTracked)),
 		cleanUpTime: cleanUpTime,
 		name:        name,
 		windowSize:  windowSize,
@@ -33,6 +33,11 @@ func (i *Int32Direction) Hit(clock int32, val interface{}) bool {
 	// We need to use the lock to access the hits map.
 	status := i.hits.Lock(value)
 	defer i.hits.Unlock(value)
+
+	// Status is nil when we've exceeded the max number of tracked values.
+	if status == nil {
+		return false
+	}
 
 	// We're only dealing with floats from here on.
 	fClock := float64(clock)
