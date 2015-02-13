@@ -15,23 +15,23 @@ func NewHitCounter(directions []Direction) *HitCounter {
 	result.clock = NewClock()
 	result.Server = server.New()
 
-	for _, dir := range directions {
+	for i := range directions {
 		// Add the route
-		result.Routes[dir.Name()] = makeRoute(result, dir)
+		result.Routes[directions[i].Name] = makeRoute(result, &directions[i])
 
 		// Schedule the cleanup
-		go func(dir Direction) {
+		go func(dir *Direction) {
 			for {
-				dir.CleanUp(result.clock.GetTime())
-				time.Sleep(time.Duration(dir.CleanUpTime()) * time.Second)
+				dir.Store.CleanUp(result.clock.GetTime())
+				time.Sleep(time.Duration(dir.CleanUpTime) * time.Second)
 			}
-		}(dir)
+		}(&directions[i])
 	}
 
 	return result
 }
 
-func makeRoute(hitCounter *HitCounter, dir Direction) func(interface{}) bool {
+func makeRoute(hitCounter *HitCounter, dir *Direction) func(interface{}) bool {
 	return func(val interface{}) bool {
 		return dir.Hit(hitCounter.clock.GetTime(), val)
 	}

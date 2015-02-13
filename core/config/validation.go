@@ -25,7 +25,9 @@ func (j *jsonConfiguration) Validate() []error {
 		result = append(result, fmt.Errorf("no defined directions"))
 	}
 
-	for i, dir := range j.Directions {
+	for i := range j.Directions {
+		dir := &j.Directions[i]
+
 		// Required field
 		if dir.Name == "" {
 			result = append(result, fmt.Errorf("direction %d has no name", i))
