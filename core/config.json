@@ -1,6 +1,7 @@
 {
   "listen type": "unix",
   "listen address": "/tmp/bfp.sock",
+  "dashboard address": ":3000",
   "directions": [
     {
       "name": "password",

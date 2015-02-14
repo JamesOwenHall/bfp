@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/JamesOwenHall/BruteForceProtection/core/config"
+	"github.com/JamesOwenHall/BruteForceProtection/core/dashboard"
 	"github.com/JamesOwenHall/BruteForceProtection/core/hitcounter"
 	"os"
 	"os/signal"
@@ -32,13 +33,20 @@ func main() {
 	counter := hitcounter.NewHitCounter(configuration.Directions)
 	defer counter.Close()
 
-	// Start server
+	// Start message server
 	err := counter.ListenAndServe(configuration.ListenType, configuration.ListenAddress)
 	if err == nil {
 		fmt.Println("Now listening at", configuration.ListenAddress)
 	} else {
 		fmt.Println("Server error: can't listen at", configuration.ListenAddress)
 		return
+	}
+
+	// Start the dashboard server
+	var dash *dashboard.Server
+	if configuration.DashboardAddress != "" {
+		dash = dashboard.New(configuration.DashboardAddress)
+		dash.ListenAndServe()
 	}
 
 	// Capture interrupt signal so that the server closes properly

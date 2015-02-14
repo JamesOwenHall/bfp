@@ -9,9 +9,10 @@ import (
 // jsonConfiguration is a struct that mirrors the data as it should be found in
 // the configuration file.
 type jsonConfiguration struct {
-	Directions    []jsonDirection `json:"directions"`
-	ListenAddress string          `json:"listen address"`
-	ListenType    string          `json:"listen type"`
+	Directions       []jsonDirection `json:"directions"`
+	ListenAddress    string          `json:"listen address"`
+	ListenType       string          `json:"listen type"`
+	DashboardAddress string          `json:"dashboard address"`
 }
 
 // jsonDirection is a struct that mirrors the direction objects as they should

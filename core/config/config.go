@@ -7,9 +7,10 @@ import (
 // Configuration is a struct that represents the contents of a configuration
 // file.
 type Configuration struct {
-	Directions    []hitcounter.Direction
-	ListenAddress string
-	ListenType    string
+	Directions       []hitcounter.Direction
+	ListenAddress    string
+	ListenType       string
+	DashboardAddress string
 }
 
 // ReadConfig parses a configuration file and returns an instance of
@@ -26,6 +27,7 @@ func ReadConfig(filename string) (*Configuration, []error) {
 	result := new(Configuration)
 	result.ListenAddress = parsed.ListenAddress
 	result.ListenType = parsed.ListenType
+	result.DashboardAddress = parsed.DashboardAddress
 	result.Directions = make([]hitcounter.Direction, 0, len(parsed.Directions))
 
 	for _, jsonDir := range parsed.Directions {
