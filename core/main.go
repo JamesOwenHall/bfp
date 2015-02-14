@@ -11,13 +11,23 @@ import (
 	"runtime"
 )
 
+const version = "0.1.0"
+
 func main() {
 	// Setup multithreading
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
 	// Parse flags
 	configFilename := flag.String("c", "config.json", "the name of the configuration file")
+	displayVersion := flag.Bool("version", false, "display the version number")
 	flag.Parse()
+
+	// Display version number
+	if *displayVersion {
+		fmt.Println("BFP core version", version)
+		fmt.Println("Copyright (C) James Hall 2015.")
+		return
+	}
 
 	// Read the configuration
 	configuration, errs := config.ReadConfig(*configFilename)
