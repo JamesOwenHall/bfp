@@ -2,6 +2,7 @@ package hitcounter
 
 type Direction struct {
 	Store       ShardMap
+	History     History
 	Name        string
 	CleanUpTime float64
 	MaxHits     float64
@@ -9,6 +10,8 @@ type Direction struct {
 }
 
 func (d *Direction) Hit(clock int32, val interface{}) bool {
+	d.History.Hit()
+
 	status, mutex := d.Store.Get(val)
 	if status == nil {
 		return false

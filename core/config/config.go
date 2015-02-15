@@ -37,6 +37,7 @@ func ReadConfig(filename string) (*Configuration, []error) {
 			CleanUpTime: jsonDir.CleanUpTime,
 			MaxHits:     jsonDir.MaxHits,
 			WindowSize:  jsonDir.WindowSize,
+			History:     hitcounter.DefaultHistory(),
 		}
 
 		switch jsonDir.Typ {
