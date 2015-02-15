@@ -11,8 +11,6 @@ import (
 	"runtime"
 )
 
-const version = "0.1.0"
-
 func main() {
 	// Setup multithreading
 	runtime.GOMAXPROCS(runtime.NumCPU())
@@ -24,7 +22,7 @@ func main() {
 
 	// Display version number
 	if *displayVersion {
-		fmt.Println("BFP core version", version)
+		fmt.Println("BFP core version", config.Version)
 		fmt.Println("Copyright (C) James Hall 2015.")
 		return
 	}
@@ -55,7 +53,7 @@ func main() {
 	// Start the dashboard server
 	var dash *dashboard.Server
 	if configuration.DashboardAddress != "" {
-		dash = dashboard.New(configuration.DashboardAddress)
+		dash = dashboard.New(configuration, counter)
 		dash.ListenAndServe()
 	}
 

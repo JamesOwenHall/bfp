@@ -1,20 +1,25 @@
 package dashboard
 
 import (
-	"fmt"
+	"github.com/JamesOwenHall/BruteForceProtection/core/config"
+	"github.com/JamesOwenHall/BruteForceProtection/core/hitcounter"
 	"net/http"
 )
 
 type Server struct {
 	http.Server
-	mux *http.ServeMux
+	mux     *http.ServeMux
+	conf    *config.Configuration
+	counter *hitcounter.HitCounter
 }
 
-func New(addr string) *Server {
+func New(conf *config.Configuration, counter *hitcounter.HitCounter) *Server {
 	result := new(Server)
+	result.conf = conf
+	result.counter = counter
 	result.mux = http.NewServeMux()
 	result.Server = http.Server{
-		Addr:    addr,
+		Addr:    conf.DashboardAddress,
 		Handler: result.mux,
 	}
 
@@ -25,10 +30,4 @@ func New(addr string) *Server {
 
 func (s *Server) ListenAndServe() {
 	go s.Server.ListenAndServe()
-}
-
-func (s *Server) setupRoutes() {
-	s.mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "<h1>Dashboard</h1>")
-	})
 }

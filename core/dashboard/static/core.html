@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/core.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Brute Force Protection</h1>
+      <hr />
+
+      <h2>Configuration</h2>
+      <table>
+        <tbody>
+          <tr>
+            <td>Version</td>
+            <td>{{.Version}}</td>
+          </tr>
+          <tr>
+            <td>Listen type</td>
+            <td>{{.ListenType}}</td>
+          </tr>
+          <tr>
+            <td>Listen address</td>
+            <td>{{.ListenAddress}}</td>
+          </tr>
+          <tr>
+            <td>Number of directions</td>
+            <td>{{.NumDirections}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <script src="/core.js"></script>
+  </body>
+</html>
