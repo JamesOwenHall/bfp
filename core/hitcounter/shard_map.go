@@ -10,4 +10,5 @@ type ShardMap interface {
 	Get(key interface{}) (*BlockStatus, *sync.Mutex)
 	CleanUp(clock int32)
 	Type() string
+	BlockedValues() []interface{}
 }

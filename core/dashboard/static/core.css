@@ -53,7 +53,7 @@ h1, h2, h3, h4, h5, h6, p {
   width: 33%;
 }
 .col-2-3 {
-  width: 66%;
+  width: 67%;
 }
 
 /* Tables */
@@ -125,4 +125,11 @@ h3 {
 
 .big-counter .blocked-count {
   font-size: 5rem;
+}
+
+/* Directions */
+
+ul.blocked-value-list {
+  max-height: 120px;
+  overflow: scroll;
 }

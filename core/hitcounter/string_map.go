@@ -76,3 +76,23 @@ func (s *StringMap) CleanUp(clock int32) {
 func (s *StringMap) Type() string {
 	return "string"
 }
+
+func (s *StringMap) BlockedValues() []interface{} {
+	result := make([]interface{}, 0)
+
+	for i := range s.mutexes {
+		mutex := &s.mutexes[i]
+		shard := &s.shards[i]
+		mutex.Lock()
+
+		for key, status := range *shard {
+			if status.IsBlocked {
+				result = append(result, key)
+			}
+		}
+
+		mutex.Unlock()
+	}
+
+	return result
+}
