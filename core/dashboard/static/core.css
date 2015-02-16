@@ -12,6 +12,7 @@
 }
 
 body {
+  background: hsl(0, 0%, 87%);
   margin: 0;
 }
 
@@ -19,11 +20,11 @@ body {
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
+  background: white;
 }
 
-hr {
-  border: none;
-  border-top: 1px solid #CCC;
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
 }
 
 /* Grid */
@@ -36,7 +37,7 @@ hr {
 
 [class*='col-'] {
   float: left;
-  padding-right: 15px;
+  padding-right: 20px;
 }
 [class*='col-']:last-of-type {
   padding-right: 0;
@@ -70,4 +71,57 @@ td {
 
 td:nth-child(1) {
   font-weight: 500;
+}
+
+/* Header */
+
+header {
+  background: hsl(0, 0%, 33%);
+  margin: 0;
+}
+
+header h1 {
+  color: white;
+  font-size: 1.7rem;
+  padding: 30px 20px;
+  text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+}
+
+#logo {
+  background: hsl(207, 50%, 48%);
+  display: inline-block;
+}
+
+/* Sections */
+
+section {
+  padding: 20px;
+}
+
+.divider {
+  background: hsl(0, 0%, 94%);
+  margin: 0;
+  padding: 12px 20px;
+}
+
+.divider h2 {
+  font-size: 1rem;
+}
+
+h3 {
+  color: hsl(0, 0%, 33%);
+  text-transform: uppercase;
+}
+
+/* Big counter */
+
+.big-counter p {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.big-counter .blocked-count {
+  font-size: 5rem;
 }

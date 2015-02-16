@@ -6,30 +6,54 @@
   </head>
   <body>
     <div class="container">
-      <h1>Brute Force Protection</h1>
-      <hr />
+      <header>
+        <div id="logo">
+          <h1>Brute Force Protection</h1>
+        </div>
+      </header>
 
-      <h2>Configuration</h2>
-      <table>
-        <tbody>
-          <tr>
-            <td>Version</td>
-            <td>{{.Version}}</td>
-          </tr>
-          <tr>
-            <td>Listen type</td>
-            <td>{{.ListenType}}</td>
-          </tr>
-          <tr>
-            <td>Listen address</td>
-            <td>{{.ListenAddress}}</td>
-          </tr>
-          <tr>
-            <td>Number of directions</td>
-            <td>{{.NumDirections}}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="divider">
+        <h2>Dashboard</h2>
+      </div>
+      <section>
+        <div class="grid">
+          <div class="big-counter col-1-3">
+            <p class="blocked-count">0</p>
+            <p>blocked values</p>
+          </div>
+          <div class="col-2-3">
+            <table>
+              <tbody>
+                <tr>
+                  <td>Version</td>
+                  <td>{{.Version}}</td>
+                </tr>
+                <tr>
+                  <td>Listen type</td>
+                  <td>{{.ListenType}}</td>
+                </tr>
+                <tr>
+                  <td>Listen address</td>
+                  <td>{{.ListenAddress}}</td>
+                </tr>
+                <tr>
+                  <td>Number of directions</td>
+                  <td>{{len .Directions}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <div class="divider">
+        <h2>Directions</h2>
+      </div>
+      <section class="directions">
+        {{range .Directions}}
+          <h3>{{.Name}}</h3>
+        {{end}}
+      </section>
     </div>
     <script src="/core.js"></script>
   </body>

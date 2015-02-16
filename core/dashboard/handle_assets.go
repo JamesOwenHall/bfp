@@ -2,6 +2,7 @@ package dashboard
 
 import (
 	"github.com/JamesOwenHall/BruteForceProtection/core/config"
+	"github.com/JamesOwenHall/BruteForceProtection/core/hitcounter"
 	"html/template"
 	"net/http"
 )
@@ -23,13 +24,13 @@ func (s *Server) serveHomePage(w http.ResponseWriter, r *http.Request) {
 	data := struct {
 		ListenAddress string
 		ListenType    string
-		NumDirections int
 		Version       string
+		Directions    []hitcounter.Direction
 	}{
 		ListenAddress: s.conf.ListenAddress,
 		ListenType:    s.conf.ListenType,
-		NumDirections: len(s.conf.Directions),
 		Version:       config.Version,
+		Directions:    s.conf.Directions,
 	}
 
 	t := template.Must(template.ParseFiles("dashboard/static/core.html"))

@@ -7,8 +7,8 @@ import (
 
 type Counter struct {
 	counts    []uint64
-	numCounts int
-	scale     int
+	NumCounts int
+	Scale     int
 	lock      sync.Mutex
 	index     int
 }
@@ -16,8 +16,8 @@ type Counter struct {
 func NewCounter(n, scale int) *Counter {
 	return &Counter{
 		counts:    make([]uint64, n),
-		numCounts: n,
-		scale:     scale,
+		NumCounts: n,
+		Scale:     scale,
 	}
 }
 
@@ -30,10 +30,10 @@ func (c *Counter) Hit() {
 
 func (c *Counter) start() {
 	go func() {
-		ticker := time.Tick(time.Duration(c.scale) * time.Second)
+		ticker := time.Tick(time.Duration(c.Scale) * time.Second)
 		for range ticker {
 			c.lock.Lock()
-			c.index = (c.index + 1) % c.numCounts
+			c.index = (c.index + 1) % c.NumCounts
 			c.counts[c.index] = 0
 			c.lock.Unlock()
 		}
@@ -41,40 +41,41 @@ func (c *Counter) start() {
 }
 
 func (c *Counter) Read() []uint64 {
-	result := make([]uint64, c.numCounts-1)
+	result := make([]uint64, c.NumCounts-1)
 
 	c.lock.Lock()
 	defer c.lock.Unlock()
 
 	for iResult := range result {
-		iCounts := (1 + c.index + iResult) % c.numCounts
+		iCounts := (1 + c.index + iResult) % c.NumCounts
 		result[iResult] = c.counts[iCounts]
 	}
 
 	return result
 }
 
+func (c *Counter) TimeRange() string {
+	return (time.Duration(c.NumCounts*c.Scale) * time.Second).String()
+}
+
 type History struct {
-	Counters []*Counter
+	Short *Counter
+	Long  *Counter
 }
 
 func DefaultHistory() History {
 	result := History{
-		Counters: []*Counter{
-			NewCounter(60, 1),
-			NewCounter(144, 300),
-		},
+		Short: NewCounter(60, 1),
+		Long:  NewCounter(144, 600),
 	}
 
-	for i := range result.Counters {
-		result.Counters[i].start()
-	}
+	result.Short.start()
+	result.Long.start()
 
 	return result
 }
 
 func (h *History) Hit() {
-	for i := range h.Counters {
-		h.Counters[i].Hit()
-	}
+	h.Short.Hit()
+	h.Long.Hit()
 }
