@@ -56,6 +56,16 @@ h1, h2, h3, h4, h5, h6, p {
   width: 67%;
 }
 
+@media (max-width: 768px) {
+  [class*='col-'] {
+    margin-top: 20px;
+    width: 100%;
+  }
+  [class*='col-']:nth-child(1) {
+    margin-top: 0;
+  }
+}
+
 /* Tables */
 
 table {
