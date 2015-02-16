@@ -111,6 +111,7 @@ section {
 h3 {
   color: hsl(0, 0%, 33%);
   text-transform: uppercase;
+  padding-bottom: 0.5rem;
 }
 
 /* Big counter */

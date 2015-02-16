@@ -70,3 +70,7 @@ func (i *Int32Map) CleanUp(clock int32) {
 		m.Unlock()
 	}
 }
+
+func (i *Int32Map) Type() string {
+	return "int32"
+}

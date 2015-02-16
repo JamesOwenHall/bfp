@@ -49,11 +49,35 @@
       <div class="divider">
         <h2>Directions</h2>
       </div>
-      <section class="directions">
-        {{range .Directions}}
+      {{range .Directions}}
+        <section>
           <h3>{{.Name}}</h3>
-        {{end}}
-      </section>
+          <div class="grid">
+            <div class="col-1-2">
+              <table>
+                <tbody>
+                  <tr>
+                    <td>Type</td>
+                    <td>{{.Store.Type}}</td>
+                  </tr>
+                  <tr>
+                    <td>Clean up time</td>
+                    <td>{{.CleanUpTime}} sec</td>
+                  </tr>
+                  <tr>
+                    <td>Threshold</td>
+                    <td>{{.MaxHits}} hits</td>
+                  </tr>
+                  <tr>
+                    <td>Window size</td>
+                    <td>{{.WindowSize}} sec</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+      {{end}}
     </div>
     <script src="/core.js"></script>
   </body>

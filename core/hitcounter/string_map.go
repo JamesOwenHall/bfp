@@ -72,3 +72,7 @@ func (s *StringMap) CleanUp(clock int32) {
 		m.Unlock()
 	}
 }
+
+func (s *StringMap) Type() string {
+	return "string"
+}
