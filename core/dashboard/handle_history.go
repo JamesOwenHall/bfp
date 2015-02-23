@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) HandleHistory(w http.ResponseWriter, r *http.Request) {
-	data := make([]interface{}, 0, 2*len(s.conf.Directions))
+	data := make([]interface{}, 0, len(s.conf.Directions))
 
 	for iDirection := range s.conf.Directions {
 		direction := &s.conf.Directions[iDirection]
@@ -17,6 +17,7 @@ func (s *Server) HandleHistory(w http.ResponseWriter, r *http.Request) {
 			"short-history":  history.Short.Read(),
 			"long-history":   history.Long.Read(),
 			"blocked-values": direction.Store.BlockedValues(),
+			"clock":          s.counter.Clock.GetTime(),
 		}
 
 		data = append(data, dirData)

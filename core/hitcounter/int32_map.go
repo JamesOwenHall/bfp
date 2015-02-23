@@ -75,8 +75,8 @@ func (i *Int32Map) Type() string {
 	return "int32"
 }
 
-func (i *Int32Map) BlockedValues() []interface{} {
-	result := make([]interface{}, 0)
+func (i *Int32Map) BlockedValues() []BlockedValue {
+	result := make([]BlockedValue, 0)
 
 	for j := range i.mutexes {
 		mutex := &i.mutexes[j]
@@ -85,7 +85,10 @@ func (i *Int32Map) BlockedValues() []interface{} {
 
 		for key, status := range *shard {
 			if status.IsBlocked {
-				result = append(result, key)
+				result = append(
+					result,
+					BlockedValue{Since: status.Since, Value: key},
+				)
 			}
 		}
 

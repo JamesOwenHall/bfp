@@ -71,8 +71,11 @@ function updateBlockedValueList() {
     // Create the new list
     var fragment = document.createDocumentFragment();
     direction["blocked-values"].forEach(function(value) {
+      var duration = direction.clock - value.Since;
+      var text = '“' + value.Value + '” for ' + duration + " seconds";
+
       var li = document.createElement("li");
-      li.appendChild(document.createTextNode(value));
+      li.appendChild(document.createTextNode(text));
       fragment.appendChild(li);
     });
 

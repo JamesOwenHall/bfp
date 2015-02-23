@@ -6,13 +6,13 @@ import (
 )
 
 type HitCounter struct {
-	clock *Clock
+	Clock *Clock
 	*server.Server
 }
 
 func NewHitCounter(directions []Direction) *HitCounter {
 	result := new(HitCounter)
-	result.clock = NewClock()
+	result.Clock = NewClock()
 	result.Server = server.New()
 
 	for i := range directions {
@@ -22,7 +22,7 @@ func NewHitCounter(directions []Direction) *HitCounter {
 		// Schedule the cleanup
 		go func(dir *Direction) {
 			for {
-				dir.Store.CleanUp(result.clock.GetTime())
+				dir.Store.CleanUp(result.Clock.GetTime())
 				time.Sleep(time.Duration(dir.CleanUpTime) * time.Second)
 			}
 		}(&directions[i])
@@ -33,6 +33,6 @@ func NewHitCounter(directions []Direction) *HitCounter {
 
 func makeRoute(hitCounter *HitCounter, dir *Direction) func(interface{}) bool {
 	return func(val interface{}) bool {
-		return dir.Hit(hitCounter.clock.GetTime(), val)
+		return dir.Hit(hitCounter.Clock.GetTime(), val)
 	}
 }

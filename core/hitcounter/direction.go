@@ -28,7 +28,11 @@ func (d *Direction) Hit(clock int32, val interface{}) bool {
 		return true
 	} else if status.FrontTile > fClock+incAmount {
 		// We've crossed the threshold, start blocking
-		status.IsBlocked = true
+		if !status.IsBlocked {
+			status.IsBlocked = true
+			status.Since = fClock
+		}
+
 		return false
 	} else {
 		// We haven't crossed the threshold yet, let's increment
@@ -37,7 +41,11 @@ func (d *Direction) Hit(clock int32, val interface{}) bool {
 		// Now that we've incremented, we may have crossed the threshold
 		if status.FrontTile > fClock+d.WindowSize {
 			// We crossed the threshold, start blocking
-			status.IsBlocked = true
+			if !status.IsBlocked {
+				status.IsBlocked = true
+				status.Since = fClock
+			}
+
 			return false
 		} else {
 			// We're not over the threshold even after incrementing.  But it's
