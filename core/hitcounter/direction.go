@@ -10,6 +10,7 @@ type Direction struct {
 }
 
 func (d *Direction) Hit(clock int32, val interface{}) bool {
+	// Record the hit in our history.
 	d.History.Hit()
 
 	status, mutex := d.Store.Get(val)
@@ -18,40 +19,34 @@ func (d *Direction) Hit(clock int32, val interface{}) bool {
 	}
 	defer mutex.Unlock()
 
-	incAmount := (d.WindowSize / d.MaxHits)
-
 	fClock := float64(clock)
+	threshold := fClock + d.WindowSize
+
 	if status.FrontTile < fClock {
-		// No recent hits
-		status.FrontTile = fClock + incAmount
+		// The window was clear.
+		status.FrontTile = fClock
 		status.IsBlocked = false
-		return true
-	} else if status.FrontTile > fClock+incAmount {
-		// We've crossed the threshold, start blocking
+	} else if status.FrontTile >= threshold {
+		// We haven't incremented anything yet and we're beyond the threshold.
+		// Therefore we must have already started blocking after a previous
+		// hit.
+		return false
+	}
+
+	status.FrontTile += d.WindowSize / d.MaxHits
+
+	if status.FrontTile >= threshold {
+		// We're above the threshold, but this happened only after incrementing
+		// the front tile.
+
 		if !status.IsBlocked {
-			status.IsBlocked = true
+			// This is the start time for this block.  We need to record it.
 			status.Since = fClock
 		}
 
+		status.IsBlocked = true
 		return false
 	} else {
-		// We haven't crossed the threshold yet, let's increment
-		status.FrontTile += incAmount
-
-		// Now that we've incremented, we may have crossed the threshold
-		if status.FrontTile > fClock+d.WindowSize {
-			// We crossed the threshold, start blocking
-			if !status.IsBlocked {
-				status.IsBlocked = true
-				status.Since = fClock
-			}
-
-			return false
-		} else {
-			// We're not over the threshold even after incrementing.  But it's
-			// possible that we crossed it earlier, so let's make sure we're
-			// not already blocking.
-			return !status.IsBlocked
-		}
+		return !status.IsBlocked
 	}
 }
