@@ -126,8 +126,11 @@ h3 {
 
 /* Big counter */
 
-.big-counter p {
+.big-counter {
   text-align: center;
+}
+
+.big-counter p {
   font-size: 1.5rem;
   font-weight: bold;
   margin: 0;

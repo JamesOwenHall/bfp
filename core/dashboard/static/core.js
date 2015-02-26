@@ -3,6 +3,10 @@ var histData;
 
 // Entry point
 window.onload = function() {
+  reloadData();
+};
+
+function reloadData() {
   get("/history", function(raw) {
     histData = JSON.parse(raw);
 
@@ -10,7 +14,7 @@ window.onload = function() {
     update24hActivity();
     updateBlockedValueList();
   });
-};
+}
 
 // Common utilities
 
@@ -63,6 +67,10 @@ function update24hActivity() {
   var td = document.querySelector("[data-activity]");
   td.innerText = totalHits;
 }
+
+document.getElementById("refresh-button").addEventListener("click", function() {
+  reloadData();
+});
 
 // Blocked value list
 
