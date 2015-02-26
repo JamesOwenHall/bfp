@@ -1,4 +1,4 @@
-package hitcounter
+package store
 
 import (
 	"sync"
@@ -11,9 +11,4 @@ type ShardMap interface {
 	CleanUp(clock int32)
 	Type() string
 	BlockedValues() []BlockedValue
-}
-
-type BlockedValue struct {
-	Since float64
-	Value interface{}
 }

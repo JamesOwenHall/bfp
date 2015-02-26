@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/JamesOwenHall/BruteForceProtection/core/hitcounter"
+	"github.com/JamesOwenHall/BruteForceProtection/core/store"
 )
 
 // Configuration is a struct that represents the contents of a configuration
@@ -42,9 +43,9 @@ func ReadConfig(filename string) (*Configuration, []error) {
 
 		switch jsonDir.Typ {
 		case "string":
-			dir.Store = hitcounter.NewStringMap(int64(jsonDir.MaxTracked))
+			dir.Store = store.NewStringMap(int64(jsonDir.MaxTracked))
 		case "int32":
-			dir.Store = hitcounter.NewInt32Map(int64(jsonDir.MaxTracked))
+			dir.Store = store.NewInt32Map(int64(jsonDir.MaxTracked))
 		}
 
 		// Add it to the list

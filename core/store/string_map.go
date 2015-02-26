@@ -1,4 +1,4 @@
-package hitcounter
+package store
 
 import (
 	"hash/fnv"

@@ -1,7 +1,11 @@
 package hitcounter
 
+import (
+	"github.com/JamesOwenHall/BruteForceProtection/core/store"
+)
+
 type Direction struct {
-	Store       ShardMap
+	Store       store.ShardMap
 	History     History
 	Name        string
 	CleanUpTime float64
