@@ -44,9 +44,9 @@ func main() {
 	// Start message server
 	err := counter.ListenAndServe(configuration.ListenType, configuration.ListenAddress)
 	if err == nil {
-		fmt.Println("Now listening at", configuration.ListenAddress)
+		fmt.Println("Listening for hits @", configuration.ListenAddress)
 	} else {
-		fmt.Println("Server error: can't listen at", configuration.ListenAddress)
+		fmt.Println("Server error: can't listen @", configuration.ListenAddress)
 		return
 	}
 
@@ -55,6 +55,7 @@ func main() {
 	if configuration.DashboardAddress != "" {
 		dash = dashboard.New(configuration, counter)
 		dash.ListenAndServe()
+		fmt.Println("Dashboard listening @", configuration.DashboardAddress)
 	}
 
 	// Capture interrupt signal so that the server closes properly
