@@ -3,16 +3,17 @@ package dashboard
 import (
 	"github.com/JamesOwenHall/BruteForceProtection/core/config"
 	"github.com/JamesOwenHall/BruteForceProtection/core/hitcounter"
-	"html/template"
 	"net/http"
 )
 
 func (s *Server) HandleAssets(w http.ResponseWriter, r *http.Request) {
 	switch r.URL.Path {
 	case "/core.css":
-		http.ServeFile(w, r, "dashboard/static/core.css")
+		w.Header().Set("Content-Type", "text/css")
+		w.Write([]byte(coreCss))
 	case "/core.js":
-		http.ServeFile(w, r, "dashboard/static/core.js")
+		w.Header().Set("Content-Type", "application/js")
+		w.Write([]byte(coreJs))
 	case "/":
 		s.serveHomePage(w, r)
 	default:
@@ -33,6 +34,5 @@ func (s *Server) serveHomePage(w http.ResponseWriter, r *http.Request) {
 		Directions:    s.conf.Directions,
 	}
 
-	t := template.Must(template.ParseFiles("dashboard/static/core.html"))
-	t.Execute(w, data)
+	s.t.Execute(w, data)
 }
