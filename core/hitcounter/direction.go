@@ -30,10 +30,7 @@ func (d *Direction) Hit(clock int32, val interface{}) bool {
 		// The window was clear.
 		status.FrontTile = fClock
 		status.IsBlocked = false
-	} else if status.FrontTile >= threshold {
-		// We haven't incremented anything yet and we're beyond the threshold.
-		// Therefore we must have already started blocking after a previous
-		// hit.
+	} else if status.IsBlocked {
 		return false
 	}
 
@@ -48,6 +45,7 @@ func (d *Direction) Hit(clock int32, val interface{}) bool {
 			status.Since = fClock
 		}
 
+		status.FrontTile = threshold
 		status.IsBlocked = true
 		return false
 	} else {
