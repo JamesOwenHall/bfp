@@ -41,13 +41,13 @@ func (c *Counter) start() {
 }
 
 func (c *Counter) Read() []uint64 {
-	result := make([]uint64, c.NumCounts-1)
+	result := make([]uint64, c.NumCounts)
 
 	c.lock.Lock()
 	defer c.lock.Unlock()
 
 	for iResult := range result {
-		iCounts := (1 + c.index + iResult) % c.NumCounts
+		iCounts := (c.index + iResult) % c.NumCounts
 		result[iResult] = c.counts[iCounts]
 	}
 
