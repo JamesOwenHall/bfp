@@ -41,6 +41,7 @@ func (i *Int32Map) Get(key interface{}) (*BlockStatus, *sync.Mutex) {
 	if i.maxTracked != 0 {
 		totalApprox := NumShards * int64(len(shard))
 		if totalApprox > i.maxTracked {
+			mutex.Unlock()
 			return nil, nil
 		}
 	}

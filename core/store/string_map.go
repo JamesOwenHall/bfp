@@ -43,6 +43,7 @@ func (s *StringMap) Get(key interface{}) (*BlockStatus, *sync.Mutex) {
 	if s.maxTracked != 0 {
 		totalApprox := NumShards * int64(len(shard))
 		if totalApprox > s.maxTracked {
+			mutex.Unlock()
 			return nil, nil
 		}
 	}
