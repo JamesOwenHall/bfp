@@ -6,7 +6,6 @@ import (
 
 type Direction struct {
 	Store       store.ShardMap
-	History     History
 	Name        string
 	CleanUpTime float64
 	MaxHits     float64
@@ -14,9 +13,6 @@ type Direction struct {
 }
 
 func (d *Direction) Hit(clock int32, val interface{}) bool {
-	// Record the hit in our history.
-	d.History.Hit()
-
 	status, mutex := d.Store.Get(val)
 	if status == nil {
 		return false

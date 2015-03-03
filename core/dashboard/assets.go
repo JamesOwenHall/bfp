@@ -310,11 +310,11 @@ function updateBigCounter() {
 function update24hActivity() {
   var totalHits = 0;
 
-  histData.forEach(function(direction) {
-    direction["long-history"].forEach(function(count) {
-      totalHits += count;
-    });
-  });
+  // histData.forEach(function(direction) {
+  //   direction["long-history"].forEach(function(count) {
+  //     totalHits += count;
+  //   });
+  // });
 
   var td = document.querySelector("[data-activity]");
   td.innerText = totalHits;

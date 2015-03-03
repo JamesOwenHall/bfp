@@ -10,12 +10,9 @@ func (s *Server) HandleHistory(w http.ResponseWriter, r *http.Request) {
 
 	for iDirection := range s.conf.Directions {
 		direction := &s.conf.Directions[iDirection]
-		history := &direction.History
 
 		dirData := map[string]interface{}{
 			"name":           direction.Name,
-			"short-history":  history.Short.Read(),
-			"long-history":   history.Long.Read(),
 			"blocked-values": direction.Store.BlockedValues(),
 			"clock":          s.counter.Clock.GetTime(),
 		}
