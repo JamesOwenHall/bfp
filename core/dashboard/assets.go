@@ -300,7 +300,7 @@ function updateBigCounter() {
   var counter = document.querySelector(".big-counter .blocked-count");
   var count = 0;
 
-  histData.forEach(function(direction) {
+  histData.Directions.forEach(function(direction) {
     count += direction["blocked-values"].length
   });
 
@@ -327,11 +327,11 @@ document.getElementById("refresh-button").addEventListener("click", function() {
 // Blocked value list
 
 function updateBlockedValueList() {
-  histData.forEach(function(direction) {
+  histData.Directions.forEach(function(direction) {
     // Create the new list
     var fragment = document.createDocumentFragment();
     direction["blocked-values"].forEach(function(value) {
-      var duration = direction.clock - value.Since;
+      var duration = histData.Clock - value.Since;
       var text = '“' + value.Value + '” for ' + duration + " seconds";
 
       var li = document.createElement("li");
