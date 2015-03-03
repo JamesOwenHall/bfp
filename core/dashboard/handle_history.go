@@ -8,11 +8,13 @@ import (
 func (s *Server) HandleHistory(w http.ResponseWriter, r *http.Request) {
 	type HistoryData struct {
 		Clock      int32
+		TotalHits  uint64
 		Directions []interface{}
 	}
 
 	data := HistoryData{
 		Clock:      s.counter.Clock.GetTime(),
+		TotalHits:  s.counter.Count.Count(),
 		Directions: make([]interface{}, 0, len(s.conf.Directions)),
 	}
 

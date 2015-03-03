@@ -59,8 +59,7 @@ func (i *Int32Map) Get(key interface{}) (*BlockStatus, *sync.Mutex) {
 func (i *Int32Map) CleanUp(clock int32) {
 	fClock := float64(clock)
 	for j := range i.mutexes {
-		m := i.mutexes[j]
-		m.Lock()
+		i.mutexes[j].Lock()
 
 		for k := range i.shards[j] {
 			if i.shards[j][k].FrontTile < fClock {
@@ -68,7 +67,7 @@ func (i *Int32Map) CleanUp(clock int32) {
 			}
 		}
 
-		m.Unlock()
+		i.mutexes[j].Unlock()
 	}
 }
 
@@ -80,9 +79,8 @@ func (i *Int32Map) BlockedValues() []BlockedValue {
 	result := make([]BlockedValue, 0)
 
 	for j := range i.mutexes {
-		mutex := &i.mutexes[j]
 		shard := &i.shards[j]
-		mutex.Lock()
+		i.mutexes[j].Lock()
 
 		for key, status := range *shard {
 			if status.IsBlocked {
@@ -93,7 +91,7 @@ func (i *Int32Map) BlockedValues() []BlockedValue {
 			}
 		}
 
-		mutex.Unlock()
+		i.mutexes[j].Unlock()
 	}
 
 	return result
