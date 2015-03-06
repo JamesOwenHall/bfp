@@ -1,3 +1,4 @@
+// Package bfp provides the API for communicating with an instance of BFP.
 package bfp
 
 import (
@@ -7,6 +8,7 @@ import (
 	"net"
 )
 
+// The permitted connection types.
 const (
 	UnixType = "unix"
 	TcpType  = "tcp"
@@ -14,11 +16,15 @@ const (
 
 var ConnectionError = errors.New("a connection error occurred")
 
+// Bfp is a struct used to communicate with an instance of BFP.
 type Bfp struct {
 	Type string
 	Addr string
 }
 
+// Hit registers the use of a value.  It returns true if the request is deemed
+// safe and false otherwise.  If the error is not nil, this function always
+// returns false.
 func (b *Bfp) Hit(direction string, value interface{}) (bool, error) {
 	conn, err := net.Dial(b.Type, b.Addr)
 	if err != nil {

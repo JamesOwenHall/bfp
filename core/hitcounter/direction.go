@@ -4,6 +4,8 @@ import (
 	"github.com/JamesOwenHall/BruteForceProtection/core/store"
 )
 
+// Direction is a tracked resource.  See package config for definition of its
+// member variables.
 type Direction struct {
 	Store       *store.ShardMap
 	Name        string
@@ -12,6 +14,7 @@ type Direction struct {
 	WindowSize  float64
 }
 
+// Hit registers a used value.
 func (d *Direction) Hit(clock int32, val interface{}) bool {
 	status, mutex := d.Store.Get(val)
 	if status == nil {

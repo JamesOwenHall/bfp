@@ -18,6 +18,7 @@ type RunningCount struct {
 	count []uint64
 }
 
+// NewRunningCount returns an initialized *RunningCount.
 func NewRunningCount(Granularity int, Duration time.Duration) *RunningCount {
 	result := new(RunningCount)
 	result.duration = Duration
@@ -37,12 +38,15 @@ func NewRunningCount(Granularity int, Duration time.Duration) *RunningCount {
 	return result
 }
 
+// Inc increments the count by 1.  This increment will expire after the
+// RunningCount's duration.
 func (r *RunningCount) Inc() {
 	r.lock.RLock()
 	atomic.AddUint64(&r.count[r.index], 1)
 	r.lock.RUnlock()
 }
 
+// Count returns the current count.
 func (r *RunningCount) Count() uint64 {
 	var result uint64
 

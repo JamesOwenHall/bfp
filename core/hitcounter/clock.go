@@ -5,12 +5,14 @@ import (
 	"time"
 )
 
+// Clock represents an integer clock that starts at 0.
 type Clock struct {
 	lock   sync.RWMutex
 	ticks  int32
 	ticker <-chan time.Time
 }
 
+// NewClock returns an initialized and started *Clock.
 func NewClock() *Clock {
 	result := &Clock{
 		ticker: time.Tick(time.Second),
@@ -29,6 +31,7 @@ func NewClock() *Clock {
 	return result
 }
 
+// GetTime returns the number of seconds that have passed since intiialization.
 func (c *Clock) GetTime() int32 {
 	var result int32
 	c.lock.RLock()

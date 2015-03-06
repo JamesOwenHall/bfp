@@ -1,3 +1,14 @@
+// Package server implements a server following its own custom protocol.  The
+// protocol works as follows.
+//
+//     1. A client connects and sends an object in JSON format matching the
+//     structure of the Request type.
+//
+//     2. The server returns a single character. "t" means that the request is
+//     valid.  "f" means that the request is invalid (either an attack or an
+//     error).
+//
+//     3. The client disconnects or goes again from step 1.
 package server
 
 import (
@@ -5,17 +16,20 @@ import (
 	"net"
 )
 
+// Server is a server that interprets requests according to the protocol.
 type Server struct {
 	Routes   map[string]func(interface{}) bool
 	listener net.Listener
 }
 
+// New returns an initialized *Server.
 func New() *Server {
 	return &Server{
 		Routes: make(map[string]func(interface{}) bool),
 	}
 }
 
+// Blocks and listens for requests.
 func (s *Server) ListenAndServe(typ, addr string) error {
 	// Start listening.
 	var err error
@@ -60,6 +74,7 @@ func (s *Server) acceptRequests() {
 	}
 }
 
+// Close stops the server.
 func (s *Server) Close() {
 	defer func() {
 		if err := recover(); err != nil {

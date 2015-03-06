@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+// HandleAssets serves the HTML, CSS and JS assets for the dashboard.
 func (s *Server) HandleAssets(w http.ResponseWriter, r *http.Request) {
 	switch r.URL.Path {
 	case "/core.css":

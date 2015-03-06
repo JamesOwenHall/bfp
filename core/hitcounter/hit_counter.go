@@ -1,3 +1,4 @@
+// Package hitcounter augments the message-server with a store to track hits.
 package hitcounter
 
 import (
@@ -5,12 +6,14 @@ import (
 	"time"
 )
 
+// HitCounter is a server that tracks several directions.
 type HitCounter struct {
 	Clock *Clock
 	Count *RunningCount
 	*server.Server
 }
 
+// NewHitCounter returns an initialized *HitCounter.
 func NewHitCounter(directions []Direction) *HitCounter {
 	result := new(HitCounter)
 	result.Clock = NewClock()

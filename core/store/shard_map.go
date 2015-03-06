@@ -1,3 +1,5 @@
+// Package store implements a map designed for concurrent use by splitting it
+// into shards.
 package store
 
 import (
@@ -5,8 +7,10 @@ import (
 	"sync"
 )
 
+// NumShards is the number of shards for each ShardMap.
 const NumShards = 128
 
+// ShardMap is a concurrently available map.
 type ShardMap struct {
 	Type       string
 	mutexes    []sync.Mutex
@@ -14,6 +18,7 @@ type ShardMap struct {
 	maxTracked int64
 }
 
+// NewShardMap returns an initialized *ShardMap.
 func NewShardMap(maxTracked int64) *ShardMap {
 	result := new(ShardMap)
 	result.maxTracked = maxTracked
@@ -26,8 +31,11 @@ func NewShardMap(maxTracked int64) *ShardMap {
 	return result
 }
 
+// Get access the map and returns a *BlockStatus and a *Mutex.  If the mutex is
+// not nil, you must unlock it when you're done.  If the value you pass to Get
+// does not exist, it will be created for you.
 func (s *ShardMap) Get(key interface{}) (*BlockStatus, *sync.Mutex) {
-	index := s.Hash(key)
+	index := s.hash(key)
 	if index == -1 {
 		return nil, nil
 	}
@@ -55,7 +63,8 @@ func (s *ShardMap) Get(key interface{}) (*BlockStatus, *sync.Mutex) {
 	return status, mutex
 }
 
-func (s *ShardMap) Hash(v interface{}) int {
+// hash returns the hash of the value such that it is between [0, NumShards).
+func (s *ShardMap) hash(v interface{}) int {
 	switch s.Type {
 	case "string":
 		val, ok := v.(string)
@@ -79,6 +88,8 @@ func (s *ShardMap) Hash(v interface{}) int {
 	}
 }
 
+// CleanUp accesses every shard and deletes values whose FrontTile is less than
+// the clock.
 func (s *ShardMap) CleanUp(clock int32) {
 	fClock := float64(clock)
 	for i := range s.mutexes {
@@ -95,6 +106,7 @@ func (s *ShardMap) CleanUp(clock int32) {
 	}
 }
 
+// Returns the list of all values in the map that have IsBlocked == true.
 func (s *ShardMap) BlockedValues() []BlockedValue {
 	result := make([]BlockedValue, 0)
 

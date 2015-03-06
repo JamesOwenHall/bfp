@@ -5,6 +5,19 @@ import (
 	"net/http"
 )
 
+// HandleHistory returns an object in JSON with the following members.
+//
+//     - "Clock": {number} is the current clock value (starting from 0).
+//
+//     - "TotalHits": {number} is the total number of hits in the past 24
+//     hours.
+//
+//     - "Directions": {array} is the collection of directions.  Each item is
+//     an object with the following members:
+//
+//         - "blocked-values": {array} is the collection of blocked values.
+//
+//         - "name": {string} is the name of the direction.
 func (s *Server) HandleHistory(w http.ResponseWriter, r *http.Request) {
 	type HistoryData struct {
 		Clock      int32
