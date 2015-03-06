@@ -5,7 +5,7 @@ import (
 )
 
 type Direction struct {
-	Store       store.ShardMap
+	Store       *store.ShardMap
 	Name        string
 	CleanUpTime float64
 	MaxHits     float64

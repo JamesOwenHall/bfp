@@ -34,18 +34,13 @@ func ReadConfig(filename string) (*Configuration, []error) {
 	for _, jsonDir := range parsed.Directions {
 		// Create the direction according to its type
 		dir := hitcounter.Direction{
+			Store:       store.NewShardMap(int64(jsonDir.MaxTracked)),
 			Name:        jsonDir.Name,
 			CleanUpTime: jsonDir.CleanUpTime,
 			MaxHits:     jsonDir.MaxHits,
 			WindowSize:  jsonDir.WindowSize,
 		}
-
-		switch jsonDir.Typ {
-		case "string":
-			dir.Store = store.NewStringMap(int64(jsonDir.MaxTracked))
-		case "int32":
-			dir.Store = store.NewInt32Map(int64(jsonDir.MaxTracked))
-		}
+		dir.Store.Type = jsonDir.Typ
 
 		// Add it to the list
 		result.Directions = append(result.Directions, dir)
