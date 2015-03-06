@@ -3,9 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/JamesOwenHall/BruteForceProtection/core/config"
-	"github.com/JamesOwenHall/BruteForceProtection/core/dashboard"
-	"github.com/JamesOwenHall/BruteForceProtection/core/hitcounter"
+	"github.com/JamesOwenHall/bfp/core/config"
+	"github.com/JamesOwenHall/bfp/core/dashboard"
+	"github.com/JamesOwenHall/bfp/core/hitcounter"
 	"os"
 	"os/signal"
 	"runtime"

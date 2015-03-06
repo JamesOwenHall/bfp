@@ -47,8 +47,8 @@
 package config
 
 import (
-	"github.com/JamesOwenHall/BruteForceProtection/core/hitcounter"
-	"github.com/JamesOwenHall/BruteForceProtection/core/store"
+	"github.com/JamesOwenHall/bfp/core/hitcounter"
+	"github.com/JamesOwenHall/bfp/core/store"
 )
 
 // Configuration is a struct that represents the contents of a configuration

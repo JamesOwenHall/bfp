@@ -4,7 +4,7 @@ package bfp
 import (
 	"encoding/json"
 	"errors"
-	"github.com/JamesOwenHall/BruteForceProtection/core/message-server"
+	"github.com/JamesOwenHall/bfp/core/message-server"
 	"net"
 )
 

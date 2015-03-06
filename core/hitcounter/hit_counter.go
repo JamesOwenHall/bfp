@@ -2,7 +2,7 @@
 package hitcounter
 
 import (
-	"github.com/JamesOwenHall/BruteForceProtection/core/message-server"
+	"github.com/JamesOwenHall/bfp/core/message-server"
 	"time"
 )
 
