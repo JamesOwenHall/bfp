@@ -33,6 +33,7 @@ func (s *Server) HandleHistory(w http.ResponseWriter, r *http.Request) {
 
 	for iDirection := range s.conf.Directions {
 		direction := &s.conf.Directions[iDirection]
+		direction.Store.CleanUp(data.Clock)
 
 		dirData := map[string]interface{}{
 			"name":           direction.Name,
