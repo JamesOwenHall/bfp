@@ -51,3 +51,19 @@ func (d *Direction) Hit(clock int32, val interface{}) bool {
 		return !status.IsBlocked
 	}
 }
+
+// Returns the list of all values in the map that have IsBlocked == true.
+func (d *Direction) BlockedValues() []BlockedValue {
+	result := make([]BlockedValue, 0)
+
+	d.Store.Iterate(func(key interface{}, status *store.BlockStatus) {
+		if status.IsBlocked {
+			result = append(
+				result,
+				BlockedValue{Since: status.Since, Value: key},
+			)
+		}
+	})
+
+	return result
+}

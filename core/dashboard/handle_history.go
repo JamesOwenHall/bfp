@@ -36,7 +36,7 @@ func (s *Server) HandleHistory(w http.ResponseWriter, r *http.Request) {
 
 		dirData := map[string]interface{}{
 			"name":           direction.Name,
-			"blocked-values": direction.Store.BlockedValues(),
+			"blocked-values": direction.BlockedValues(),
 		}
 
 		data.Directions = append(data.Directions, dirData)

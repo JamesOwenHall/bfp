@@ -106,26 +106,17 @@ func (s *ShardMap) CleanUp(clock int32) {
 	}
 }
 
-// Returns the list of all values in the map that have IsBlocked == true.
-func (s *ShardMap) BlockedValues() []BlockedValue {
-	result := make([]BlockedValue, 0)
-
+// Iterates calls f for every key-status pair in the ShardMap.
+func (s *ShardMap) Iterate(f func(key interface{}, status *BlockStatus)) {
 	for i := range s.mutexes {
 		mutex := &s.mutexes[i]
-		shard := &s.shards[i]
 		mutex.Lock()
 
-		for key, status := range *shard {
-			if status.IsBlocked {
-				result = append(
-					result,
-					BlockedValue{Since: status.Since, Value: key},
-				)
-			}
+		shard := s.shards[i]
+		for key, status := range shard {
+			f(key, status)
 		}
 
 		mutex.Unlock()
 	}
-
-	return result
 }
