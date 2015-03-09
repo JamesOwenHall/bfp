@@ -3,13 +3,16 @@ package hitcounter
 
 import (
 	"github.com/JamesOwenHall/bfp/core/message-server"
+	"log"
+	"os"
 	"time"
 )
 
 // HitCounter is a server that tracks several directions.
 type HitCounter struct {
-	Clock *Clock
-	Count *RunningCount
+	Clock  *Clock
+	Count  *RunningCount
+	Logger *log.Logger
 	*server.Server
 }
 
@@ -18,6 +21,7 @@ func NewHitCounter(directions []Direction) *HitCounter {
 	result := new(HitCounter)
 	result.Clock = NewClock()
 	result.Count = NewRunningCount(128, 24*time.Hour)
+	result.Logger = log.New(os.Stdout, "", log.LstdFlags)
 	result.Server = server.New()
 
 	for i := range directions {
@@ -39,6 +43,11 @@ func NewHitCounter(directions []Direction) *HitCounter {
 func makeRoute(hitCounter *HitCounter, dir *Direction) func(interface{}) bool {
 	return func(val interface{}) bool {
 		hitCounter.Count.Inc()
-		return dir.Hit(hitCounter.Clock.GetTime(), val)
+		valid := dir.Hit(hitCounter.Clock.GetTime(), val)
+		if !valid {
+			hitCounter.Logger.Printf("direction=%#v value=%#v\n", dir.Name, val)
+		}
+
+		return valid
 	}
 }
