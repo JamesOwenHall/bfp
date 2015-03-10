@@ -1,13 +1,12 @@
 package hitcounter
 
 import (
-	"sync"
+	"sync/atomic"
 	"time"
 )
 
 // Clock represents an integer clock that starts at 0.
 type Clock struct {
-	lock   sync.RWMutex
 	ticks  int32
 	ticker <-chan time.Time
 }
@@ -22,9 +21,7 @@ func NewClock() *Clock {
 	go func() {
 		for {
 			<-result.ticker
-			result.lock.Lock()
-			result.ticks++
-			result.lock.Unlock()
+			atomic.AddInt32(&result.ticks, 1)
 		}
 	}()
 
@@ -33,9 +30,5 @@ func NewClock() *Clock {
 
 // GetTime returns the number of seconds that have passed since intiialization.
 func (c *Clock) GetTime() int32 {
-	var result int32
-	c.lock.RLock()
-	result = c.ticks
-	c.lock.RUnlock()
-	return result
+	return atomic.LoadInt32(&c.ticks)
 }
