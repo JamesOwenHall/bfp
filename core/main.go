@@ -59,7 +59,7 @@ func main() {
 	}
 
 	// Capture interrupt signal so that the server closes properly
-	interrupts := make(chan os.Signal)
+	interrupts := make(chan os.Signal, 1)
 	signal.Notify(interrupts, os.Interrupt)
 	<-interrupts
 }
