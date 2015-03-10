@@ -29,8 +29,6 @@ func (d *Direction) Hit(clock int32, val interface{}) bool {
 		// The window was clear.
 		status.FrontTile = fClock
 		status.IsBlocked = false
-	} else if status.IsBlocked {
-		return false
 	}
 
 	status.FrontTile += d.WindowSize / d.MaxHits
